@@ -20,12 +20,14 @@ Fix 2 . Fixing at database transactions so updating an account to churned automa
 Data Quality Issue Found 2:
 ~40% support tickets have NULL satisfaction_score. 
 
+```
 My Analysis :
 I first checked the missing percentage and found that out of 2,000 total Support tickets, 825 rows (41%) had [Satisfaction Score] as NULL.                                                                                                   
             I then tried figuring out the reason for missingness — I checked whether the missingness had a meaningfull correlation with other columns in the Support table like (Priority, Escalation Flag, Year & Quarter, Resolution Time), but no major correlation was found.                          .                                                                                                                                                            
   However, [escalated tickets] show a lower missing-score rate (33.7%) than non-escalated tickets (41.6%), and among tickets that received a [Satisfaction score], escalated tickets show a little higher average satisfaction (4.08 vs. 3.98) meaning escalated tickets receiving extra attention leaves the customers more satisfied and more willing to respond, but  the escalated sample is small (n=63), so this signal isn't that strong.
 
-Coming to a conclusion the probable reason of misisng value could be that customer's simply chose not to provide/respond a [Satisfaction score] in most cases                                                                                        
+Coming to a conclusion the probable reason of misisng value could be that customer's simply chose not to provide/respond a [Satisfaction score] in most cases .
+```                                                                                       
 
 
 
