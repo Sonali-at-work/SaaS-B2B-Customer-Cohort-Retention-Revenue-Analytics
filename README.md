@@ -2,7 +2,7 @@
 
 
 ### 1. Data Quality Issues Found and their handling
-## Data Quality Issue Found 1:
+### Data Quality Issue Found 1:
 Some accounts churn_flag=True but NO churn_event record. 
 
 ```
@@ -17,7 +17,7 @@ Fix 2 . Fixing at database transactions so updating an account to churned automa
 
 
 
-Data Quality Issue Found 2:
+### Data Quality Issue Found 2:
 ~40% support tickets have NULL satisfaction_score. 
 
 ```
@@ -36,7 +36,7 @@ Also deleting these rows is not the solution as this will led to a huge data los
 Conclusion  :  The most suitable option I choose was to create an additional flag column [Flag_Sat_Score_Missing] for missing values created using power query and  calculate Avg [Satisfaction Score] value, using only the non-null tickets , whenever it is required in querying or visualization or analysis.
 ```
 
-Data Quality Issue Found 3:
+### Data Quality Issue Found 3:
 Enterprise subscriptions with $0 MRR. Bug or test data?
 
 ```
@@ -54,7 +54,7 @@ This is not a Bug. I checked all 273 rows with Plan Tier- Enterprise and MRR=$0 
  Alternatively, I can create [status] column in subscription column  and classify these lines based on tial flag an mrr = 0 and arr = 0 . Creation of status column is discussed in next cell /problem.
 ```
 
-Data Quality Issue Found 4:
+### Data Quality Issue Found 4:
 Trial flag changes across multiple subscriptions. How to track?
 
 ```
@@ -80,7 +80,8 @@ My fix is to track [ Is Trial ] strictly at the subscription level  .
     Else 
   IF [Is Trial] = False  AND [Mrr Amount] > 0 AND [End Date] is Present AND [Churn Flag] = True THEN "Paid Churn" Subscription                                                          
 ```
-Data Quality Issue Found 5:
+
+### Data Quality Issue Found 5:
 Any subscriptions not linked to accounts? Any orphans?
 
 ```
@@ -95,7 +96,7 @@ Since, No Orphans Exist in current table -> No Fixing was Needed.  All foreign k
 ```
 
 ### 2. SQL Analysis
-QUERY 1: Churn Risk Score
+### QUERY 1: Churn Risk Score
 Identify high-risk accounts using: support escalations, downgrades, low satisfaction. Create a risk_level column (High/Medium/Low)
 
 Support_summary measures customer support friction by aggragting support ticket data at the account level
@@ -147,7 +148,7 @@ FROM account_risk_scoring
 ORDER BY churn_risk_score DESC, [Account ID] ASC;
 ```
 
-Query 2: Feature Adoption
+### Query 2: Feature Adoption
 Which features have highest adoption? Which features do churned customers use? Do beta features correlate with churn?
 ``` WITH account_status AS (
     SELECT [Account ID],CASE WHEN [Churn Flag] = TRUE THEN 1 ELSE 0 END AS is_churned
@@ -200,7 +201,7 @@ FROM feature_metrics
 ORDER BY overall_adoption_rank ASC;
 ```
 
-QUERY 3: Support Quality
+### QUERY 3: Support Quality
 Which priority tickets resolve slowest? Do escalations correlate with low satisfaction? Build a support_quality_score
 ```
 
