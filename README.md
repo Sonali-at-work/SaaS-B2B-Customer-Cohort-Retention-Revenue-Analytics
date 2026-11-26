@@ -5,12 +5,15 @@
 Data Quality Issue Found 1:
 Some accounts churn_flag=True but NO churn_event record. 
 
+```
 My Analysis :
 Total 500 accounts are there, with  [churn flag] true =110 accounts and [churn flag] false are 390. Out of 110 accounts , [churn flag] =  true 35 dont have any records in churn_event table. If the [Churn Flag] in accounts table states account level churn and if the column values are actually valid . then the most obvious reason could be that these 35 accounts have missing records, a data logging / pipeline failure in the CHURN  table.
-
+```
+```
 Fix :
 Fix 1 . Flag Correction: Update 1 ACCOUNTS.Churn Flag = FALSE for the 35 active accounts to correct false-positive flags and align with active subscriptions in SUBSCRIPTIONS table.
 Fix 2 . Fixing at database transactions so updating an account to churned automatically creates its audit log at the same time. 
+```
 
 
 
