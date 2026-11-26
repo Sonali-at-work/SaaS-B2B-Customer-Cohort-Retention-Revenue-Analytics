@@ -36,6 +36,22 @@ Also deleting these rows is not the solution as this will led to a huge data los
 Conclusion  :  The most suitable option I choose was to create an additional flag column [Flag_Sat_Score_Missing] for missing values created using power query and  calculate Avg [Satisfaction Score] value, using only the non-null tickets , whenever it is required in querying or visualization or analysis.
 ```
 
+Data Quality Issue Found 3:
+Enterprise subscriptions with $0 MRR. Bug or test data?
+
+```This is not a Bug. I checked all 273 rows with Plan Tier- Enterprise and MRR=$0 . I found that 100% ,all 273 rows have Is_Trial =True meaning - Trial Enterprise Subscriptions have $0 MRR.       
+                                                                              
+ The $0 MRR value is expected behaviour for trial Subscriptions - (It looked alarming because plan tier said "Enterprise" ,that at very first glace seemed a paid , high value account )                         
+                              
+  Like wise , for basic plan all 273  rows have Is_Trail = True and $0 Mrr and Pro plan with 259 rows having Is_Trail = True and $0 Mrr - meaning Trial Subsciptions have $ 0 MRR.
+```
+```
+ No data fix is needed, since the values are correct as-it -is. Also if  i would do any reporting/analysis : any revenue-based metric (MRR, ARR, Revenue Churn Rate) should explicitly filter out [Is Trial] = True records before aggregating, so trial accounts don't get miscounted as '$0-paying Enterprise customers' in dashboards or reports.
+
+ Alternatively, I can create [status] column in subscription column  and classify these lines based on tial flag an mrr = 0 and arr = 0 . Creation of status column is discussed in next cell /problem.```
+Data Quality Issue Found 4:
+
+
 
 ### 2. SQL Analysis
 QUERY 1: Churn Risk Score
