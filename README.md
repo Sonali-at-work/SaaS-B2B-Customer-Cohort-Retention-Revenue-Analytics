@@ -76,7 +76,18 @@ My fix is to track [ Is Trial ] strictly at the subscription level  .
     Else 
   IF [Is Trial] = False  AND [Mrr Amount] > 0 AND [End Date] is Present AND [Churn Flag] = True THEN "Paid Churn" Subscription                                                          
 ```
+Data Quality Issue Found 5:
+Any subscriptions not linked to accounts? Any orphans?
 
+```
+I checked for orphaned records/foreign Key/Referential Integriy across all four table relationships -                                                                                             1. Subscriptions [Account ID] -> Accounts [Account ID] ,                                                                                     
+2. Feature Usage [Subs. ID] -> Subscriptions [Subs. ID],                                                                                                               
+3. Support [Account ID] -> Accounts [Account ID], and                                                                                                                             
+4. Churn Events [Account ID] -> Accounts [Account ID] -- using XLOOKUP to match each table's foreign key against its parent table's primary key (e.g, checking whether every Subscription table [Account ID] actually exists in the Accounts table [Account ID]). Every VLOOKUP returned a valid match across all four relationships  meaning  zero orphaned records found."
+```
+```
+Since, No Orphans Exist in current table -> No Fixing was Needed.  All foreign keys are valid and correctly linked to their parent tables.
+```
 
 ### 2. SQL Analysis
 QUERY 1: Churn Risk Score
