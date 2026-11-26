@@ -2,7 +2,7 @@
 
 
 ### 1. Data Quality Issues Found and their handling
-Data Quality Issue Found 1:
+## Data Quality Issue Found 1:
 Some accounts churn_flag=True but NO churn_event record. 
 
 ```
