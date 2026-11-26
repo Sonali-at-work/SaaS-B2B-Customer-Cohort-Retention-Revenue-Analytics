@@ -2,6 +2,30 @@
 
 
 ### 1. Data Quality Issues Found and their handling
+Data Quality Issue Found 1:
+Some accounts churn_flag=True but NO churn_event record. 
+
+My Analysis :
+Total 500 accounts are there, with  [churn flag] true =110 accounts and [churn flag] false are 390. Out of 110 accounts , [churn flag] =  true 35 dont have any records in churn_event table. If the [Churn Flag] in accounts table states account level churn and if the column values are actually valid . then the most obvious reason could be that these 35 accounts have missing records, a data logging / pipeline failure in the CHURN  table.
+
+Fix :
+Fix 1 . Flag Correction: Update 1 ACCOUNTS.Churn Flag = FALSE for the 35 active accounts to correct false-positive flags and align with active subscriptions in SUBSCRIPTIONS table.
+Fix 2 . Fixing at database transactions so updating an account to churned automatically creates its audit log at the same time. 
+
+
+
+Data Quality Issue Found 2:
+~40% support tickets have NULL satisfaction_score. 
+
+My Analysis :
+I first checked the missing percentage and found that out of 2,000 total Support tickets, 825 rows (41%) had [Satisfaction Score] as NULL.                                                                                                   
+            I then tried figuring out the reason for missingness — I checked whether the missingness had a meaningfull correlation with other columns in the Support table like (Priority, Escalation Flag, Year & Quarter, Resolution Time), but no major correlation was found.                          .                                                                                                                                                            
+  However, [escalated tickets] show a lower missing-score rate (33.7%) than non-escalated tickets (41.6%), and among tickets that received a [Satisfaction score], escalated tickets show a little higher average satisfaction (4.08 vs. 3.98) meaning escalated tickets receiving extra attention leaves the customers more satisfied and more willing to respond, but  the escalated sample is small (n=63), so this signal isn't that strong.
+
+Coming to a conclusion the probable reason of misisng value could be that customer's simply chose not to provide/respond a [Satisfaction score] in most cases                                                                                        
+
+
+
 ### 2. SQL Analysis
 QUERY 1: Churn Risk Score
 Identify high-risk accounts using: support escalations, downgrades, low satisfaction. Create a risk_level column (High/Medium/Low)
