@@ -39,7 +39,9 @@ Conclusion  :  The most suitable option I choose was to create an additional fla
 Data Quality Issue Found 3:
 Enterprise subscriptions with $0 MRR. Bug or test data?
 
-```This is not a Bug. I checked all 273 rows with Plan Tier- Enterprise and MRR=$0 . I found that 100% ,all 273 rows have Is_Trial =True meaning - Trial Enterprise Subscriptions have $0 MRR.       
+```
+My Analysis :
+This is not a Bug. I checked all 273 rows with Plan Tier- Enterprise and MRR=$0 . I found that 100% ,all 273 rows have Is_Trial =True meaning - Trial Enterprise Subscriptions have $0 MRR.       
                                                                               
  The $0 MRR value is expected behaviour for trial Subscriptions - (It looked alarming because plan tier said "Enterprise" ,that at very first glace seemed a paid , high value account )                         
                               
@@ -55,7 +57,9 @@ Enterprise subscriptions with $0 MRR. Bug or test data?
 Data Quality Issue Found 4:
 Trial flag changes across multiple subscriptions. How to track?
 
-```76.4% of accounts (382 of 500) in subscriptions table show a 'mixed/flipping' pattern — the flag goes True→False→True in a way that doesn't represent a clean journey .         
+```
+My Analysis :
+76.4% of accounts (382 of 500) in subscriptions table show a 'mixed/flipping' pattern — the flag goes True→False→True in a way that doesn't represent a clean journey .         
                                                     
 This happens because each account can hold multiple concurrent subscription lines (up to 19 per account in this datas
 et) - one account can have a paid subscription running while simultaneously starting a new trial on a different Plan Tier.  
@@ -80,6 +84,7 @@ Data Quality Issue Found 5:
 Any subscriptions not linked to accounts? Any orphans?
 
 ```
+My Analysis :
 I checked for orphaned records/foreign Key/Referential Integriy across all four table relationships -                                                                                             1. Subscriptions [Account ID] -> Accounts [Account ID] ,                                                                                     
 2. Feature Usage [Subs. ID] -> Subscriptions [Subs. ID],                                                                                                               
 3. Support [Account ID] -> Accounts [Account ID], and                                                                                                                             
