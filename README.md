@@ -28,7 +28,13 @@ I first checked the missing percentage and found that out of 2,000 total Support
 
 Coming to a conclusion the probable reason of misisng value could be that customer's simply chose not to provide/respond a [Satisfaction score] in most cases .
 ```                                                                                       
+```
+In order to fix this , The first approach was to impute the value using mean or median but the missing  % is to high (41 % , 825 rows) and this introduces too many identical scores making 825 missing value data/column biased.    
+                                                                                   
+Also deleting these rows is not the solution as this will led to a huge data loss. Also using other coumn to derive a [Satisfaction Score] means creating scores for customer's opinion artificially    .                                                                                                                                           
 
+Conclusion  :  The most suitable option I choose was to create an additional flag column [Flag_Sat_Score_Missing] for missing values created using power query and  calculate Avg [Satisfaction Score] value, using only the non-null tickets , whenever it is required in querying or visualization or analysis.
+```
 
 
 ### 2. SQL Analysis
