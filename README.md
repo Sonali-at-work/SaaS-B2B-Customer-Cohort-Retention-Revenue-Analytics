@@ -52,11 +52,11 @@ Enterprise subscriptions with $0 MRR. Bug or test data?
 Data Quality Issue Found 4:
 
 
-
+```
 ### 2. SQL Analysis
 QUERY 1: Churn Risk Score
 Identify high-risk accounts using: support escalations, downgrades, low satisfaction. Create a risk_level column (High/Medium/Low)
-```
+
 Support_summary measures customer support friction by aggragting support ticket data at the account levelWITH support_summary AS (   -- support_summary cte Aggregates Operational Friction indicators
     SELECT [Account ID],
         COUNT(CASE WHEN [Escalation Flag] = TRUE THEN 1 END) AS escalation_count,
