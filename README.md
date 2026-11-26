@@ -50,8 +50,25 @@ Enterprise subscriptions with $0 MRR. Bug or test data?
 
  Alternatively, I can create [status] column in subscription column  and classify these lines based on tial flag an mrr = 0 and arr = 0 . Creation of status column is discussed in next cell /problem.```
 Data Quality Issue Found 4:
+```Trial flag changes across multiple subscriptions. How to track?```
+```76.4% of accounts (382 of 500) in subscriptions table show a 'mixed/flipping' pattern — the flag goes True→False→True in a way that doesn't represent a clean journey .         
+                                                    
+This happens because each account can hold multiple concurrent subscription lines (up to 19 per account in this datas
+et) - one account can have a paid subscription running while simultaneously starting a new trial on a different Plan Tier.  
 
+ The [Is Trial] flag is accurate at the individual subscription level, but it cannot be meaningfully rolled up to a single 'account trial status,' because an account doesn't have one trial journey - it has many, running independently and often overlapping."```
+```My fix is to track [ Is Trial ] strictly at the subscription level  .                                                                                    
 
+  I built a new , derived Subscription [ Status ] column (combining End Date, Mrr Amount, and Is Trial on each individual subscription row) - this classifies every row into one of four, subscription-level categories: Active Paid, Active Trial, Paid Churned, Trial Churned.      
+                                                                 
+   Below how [Status] Column is derived from End Date, Mrr Amount, Is Trial ,Churn Flag :                                                                                                                                 IF [Is Trial] = True  AND [Mrr Amount] = 0 AND [End Date] is blank AND [Churn Flag]= False THEN  "Active Trial" Subscription                                                  
+    Elif                                                                                                                           
+  IF [Is Trial] = True  AND [Mrr Amount] = 0 AND [End Date] is Present AND [Churn Flag] = True THEN  "Trial Churn" Subscription                                                 
+    Elif
+  IF [Is Trial] = False AND [Mrr Amount] > 0 AND [End Date] is blank AND [Churn Flag] = False THEN  "Active Paid" Subscription                                            
+    Else 
+  IF [Is Trial] = False  AND [Mrr Amount] > 0 AND [End Date] is Present AND [Churn Flag] = True THEN "Paid Churn" Subscription                                                          
+```
 ```
 ### 2. SQL Analysis
 QUERY 1: Churn Risk Score
