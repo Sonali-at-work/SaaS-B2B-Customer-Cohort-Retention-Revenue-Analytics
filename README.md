@@ -45,19 +45,26 @@ Enterprise subscriptions with $0 MRR. Bug or test data?
                               
   Like wise , for basic plan all 273  rows have Is_Trail = True and $0 Mrr and Pro plan with 259 rows having Is_Trail = True and $0 Mrr - meaning Trial Subsciptions have $ 0 MRR.
 ```
+
 ```
  No data fix is needed, since the values are correct as-it -is. Also if  i would do any reporting/analysis : any revenue-based metric (MRR, ARR, Revenue Churn Rate) should explicitly filter out [Is Trial] = True records before aggregating, so trial accounts don't get miscounted as '$0-paying Enterprise customers' in dashboards or reports.
 
- Alternatively, I can create [status] column in subscription column  and classify these lines based on tial flag an mrr = 0 and arr = 0 . Creation of status column is discussed in next cell /problem.```
+ Alternatively, I can create [status] column in subscription column  and classify these lines based on tial flag an mrr = 0 and arr = 0 . Creation of status column is discussed in next cell /problem.
+```
+
 Data Quality Issue Found 4:
-```Trial flag changes across multiple subscriptions. How to track?```
+Trial flag changes across multiple subscriptions. How to track?
+
 ```76.4% of accounts (382 of 500) in subscriptions table show a 'mixed/flipping' pattern — the flag goes True→False→True in a way that doesn't represent a clean journey .         
                                                     
 This happens because each account can hold multiple concurrent subscription lines (up to 19 per account in this datas
 et) - one account can have a paid subscription running while simultaneously starting a new trial on a different Plan Tier.  
 
- The [Is Trial] flag is accurate at the individual subscription level, but it cannot be meaningfully rolled up to a single 'account trial status,' because an account doesn't have one trial journey - it has many, running independently and often overlapping."```
-```My fix is to track [ Is Trial ] strictly at the subscription level  .                                                                                    
+ The [Is Trial] flag is accurate at the individual subscription level, but it cannot be meaningfully rolled up to a single 'account trial status,' because an account doesn't have one trial journey - it has many, running independently and often overlapping."
+```
+
+```
+My fix is to track [ Is Trial ] strictly at the subscription level  .                                                                                    
 
   I built a new , derived Subscription [ Status ] column (combining End Date, Mrr Amount, and Is Trial on each individual subscription row) - this classifies every row into one of four, subscription-level categories: Active Paid, Active Trial, Paid Churned, Trial Churned.      
                                                                  
@@ -69,12 +76,14 @@ et) - one account can have a paid subscription running while simultaneously star
     Else 
   IF [Is Trial] = False  AND [Mrr Amount] > 0 AND [End Date] is Present AND [Churn Flag] = True THEN "Paid Churn" Subscription                                                          
 ```
-```
+
+
 ### 2. SQL Analysis
 QUERY 1: Churn Risk Score
 Identify high-risk accounts using: support escalations, downgrades, low satisfaction. Create a risk_level column (High/Medium/Low)
 
-Support_summary measures customer support friction by aggragting support ticket data at the account levelWITH support_summary AS (   -- support_summary cte Aggregates Operational Friction indicators
+Support_summary measures customer support friction by aggragting support ticket data at the account level
+```WITH support_summary AS (   -- support_summary cte Aggregates Operational Friction indicators
     SELECT [Account ID],
         COUNT(CASE WHEN [Escalation Flag] = TRUE THEN 1 END) AS escalation_count,
         COUNT(CASE WHEN [Satisfaction Score] <= 2 THEN 1 END) AS low_sat_count,
